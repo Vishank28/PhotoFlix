@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PhotoFlix screen</title>
+  <link rel="stylesheet" href="tv.css">
+</head>
+<body>
+  <!-- Photo slideshow (two layers that cross-fade) -->
+  <div id="stage">
+    <div class="slide" id="slideA"><img class="pic" alt=""></div>
+    <div class="slide" id="slideB"><img class="pic" alt=""></div>
+    <video id="vid" class="vid" playsinline preload="auto"></video>
+    <!-- No photos yet: a glowing scene with a turning fan of example pictures and clips (img/fan-*, free from Pexels) -->
+    <div id="empty" class="empty hidden">
+      <svg class="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#0c0507"/><stop offset=".3" stop-color="#2b0b0c"/><stop offset=".5" stop-color="#6e1a12"/>
+            <stop offset=".6" stop-color="#c0461f"/><stop offset=".64" stop-color="#e4772f"/><stop offset=".68" stop-color="#3a0f0b"/><stop offset="1" stop-color="#0a0405"/>
+          </linearGradient>
+          <radialGradient id="sun" cx="1080" cy="560" r="420" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ffb35c" stop-opacity=".95"/><stop offset=".25" stop-color="#f06a2a" stop-opacity=".55"/><stop offset="1" stop-color="#f06a2a" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#b8461f" stop-opacity=".75"/><stop offset=".35" stop-color="#4a120d" stop-opacity=".85"/><stop offset="1" stop-color="#070304"/>
+          </linearGradient>
+          <linearGradient id="peakL" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#c8664a"/><stop offset=".45" stop-color="#6e2619"/><stop offset="1" stop-color="#2a0c0a"/>
+          </linearGradient>
+          <linearGradient id="peakR" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3a1411"/><stop offset="1" stop-color="#140606"/>
+          </linearGradient>
+          <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+          <filter id="glowline"><feGaussianBlur stdDeviation="7"/></filter>
+          <radialGradient id="vignette" cx="50%" cy="38%" r="75%">
+            <stop offset=".35" stop-color="#000" stop-opacity=".15"/><stop offset="1" stop-color="#000" stop-opacity=".75"/>
+          </radialGradient>
+        </defs>
+        <rect width="1600" height="900" fill="url(#sky)"/>
+        <rect width="1600" height="900" fill="url(#sun)"/>
+        <g filter="url(#soft)" opacity=".55">
+          <ellipse cx="420" cy="230" rx="320" ry="40" fill="#7a2216"/><ellipse cx="980" cy="160" rx="380" ry="34" fill="#5c1712"/>
+          <ellipse cx="1300" cy="330" rx="260" ry="30" fill="#a8401f"/><ellipse cx="640" cy="390" rx="300" ry="26" fill="#a83c1c"/>
+        </g>
+        <path d="M0 560 L180 470 L330 520 L470 450 L610 530 L760 490 L900 545 L1600 545 L1600 600 L0 600Z" fill="#2a0d0c" opacity=".9"/>
+        <path d="M860 580 L1010 410 L1090 330 L1160 262 L1235 165 L1248 250 L1226 330 L1200 430 L1180 600 L860 600Z" fill="url(#peakL)"/>
+        <path d="M1235 165 L1290 222 L1350 280 L1420 350 L1510 420 L1600 470 L1600 600 L1180 600 L1200 430 L1226 330 L1248 250Z" fill="url(#peakR)"/>
+        <path d="M1235 165 L1196 214 L1216 212 L1190 262 L1226 236 L1222 280 L1246 248 Z" fill="#f6d2c0" opacity=".9"/>
+        <path d="M1235 165 L1262 200 L1252 232 L1270 226 L1290 222Z" fill="#c9a196" opacity=".55"/>
+        <path d="M0 600 L0 548 l14 -34 l12 30 l10 -46 l14 44 l12 -28 l14 36 l16 -58 l14 54 l12 -30 l14 34 l18 -64 l16 60 l12 -26 l14 30 l16 -50 l14 48 l14 -22 l12 26 l18 -70 l16 66 l12 -24 l14 28 l16 -46 l14 44 l12 -20 l14 24 L470 600Z M1080 600 L1080 560 l12 -30 l12 28 l14 -46 l14 44 l12 -24 l16 30 l16 -62 l16 58 l12 -26 l14 30 l18 -54 l14 50 l14 -22 l12 26 l16 -64 l16 60 l12 -24 l14 28 l18 -50 l14 46 l14 -18 l12 20 l16 -42 l16 40 l14 -24 l12 28 L1600 560 L1600 600Z" fill="#0b0405"/>
+        <rect y="600" width="1600" height="300" fill="url(#lake)"/>
+        <g opacity=".22" transform="translate(0 1200) scale(1 -1)">
+          <path d="M860 600 L1060 830 L1235 1035 L1360 910 L1600 730 L1600 600Z" fill="#e2876a"/>
+        </g>
+        <rect x="1060" y="610" width="40" height="160" fill="#ffc07a" opacity=".25" filter="url(#soft)"/>
+        <path d="M-40 455 C 260 520 470 600 820 700" stroke="#ff2f22" stroke-width="10" fill="none" filter="url(#glowline)" opacity=".9"/>
+        <path d="M-40 455 C 260 520 470 600 820 700" stroke="#ff8a78" stroke-width="2" fill="none" opacity=".9"/>
+        <path d="M-40 520 C 240 580 420 650 700 760" stroke="#ff2f22" stroke-width="6" fill="none" filter="url(#glowline)" opacity=".5"/>
+        <rect width="1600" height="900" fill="url(#vignette)"/>
+      </svg>
+      <div class="empty-c">
+        <div class="logo huge"><span><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect x="23" y="16" width="55" height="54" rx="9"/><path class="w" d="M23 46a24 24 0 0 1 24 24M23 28a42 42 0 0 1 42 42"/><path d="M38.7 74h25.6a1.7 1.7 0 0 1 0 3.4H38.7a1.7 1.7 0 0 1 0-3.4zM41 79h20l-3 5.2q-.6 1-1.8 1H45.8q-1.2 0-1.8-1z"/></svg></span><b class="word">Photo<em>Flix</em></b></div>
+        <h2>Your memories, on the big screen.</h2>
+        <p>Photos and videos shared from the staff phone will appear here.</p>
+      </div>
+      <div class="fan" id="fan" aria-hidden="true">
+        <i class="c s0"><img src="img/fan-beach.webp" alt=""></i>
+        <i class="c s1"><img src="img/fan-leaves.jpg" alt=""></i>
+        <i class="c s2"><img src="img/fan-lake.webp" alt=""></i>
+        <i class="c s3"><img src="img/fan-dog.jpg" alt=""></i>
+        <i class="c s4"><img src="img/fan-hills.jpg" alt=""></i>
+      </div>
+    </div>
+  </div>
+  <div class="shade"></div>
+
+  <!-- Top-left: brand + screen name; top-right: weather | clock -->
+  <header class="top">
+    <div class="logo"><span><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect x="23" y="16" width="55" height="54" rx="9"/><path class="w" d="M23 46a24 24 0 0 1 24 24M23 28a42 42 0 0 1 42 42"/><path d="M38.7 74h25.6a1.7 1.7 0 0 1 0 3.4H38.7a1.7 1.7 0 0 1 0-3.4zM41 79h20l-3 5.2q-.6 1-1.8 1H45.8q-1.2 0-1.8-1z"/></svg></span><b class="word">Photo<em>Flix</em></b><small id="screenName"></small></div>
+    <div class="top-r">
+      <div id="weather" class="wx hidden"><span id="wxIco" class="wx-ico"></span><div class="wx-t"><b id="wxTemp"></b><span id="wxCity"></span><span id="wxDesc"></span></div></div>
+      <div class="clock"><b id="time">--:--</b><span id="date"></span></div>
+    </div>
+  </header>
+
+  <!-- Small QR in the corner, only when staff ask for it: "Show QR on TV" on a phone, or OK on the remote -->
+  <div id="qrCorner" class="qr-corner hidden">
+    <img id="qrSmall" alt="QR code">
+    <div><b>Staff: scan to join</b><span id="codeSmall"></span><small>Press Back to hide</small></div>
+  </div>
+
+  <!-- First-time setup: no staff phone linked yet -->
+  <section id="setup" class="setup hidden">
+    <div class="arcs" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i></div>
+    <div class="setup-card">
+      <div class="logo big"><span><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect x="23" y="16" width="55" height="54" rx="9"/><path class="w" d="M23 46a24 24 0 0 1 24 24M23 28a42 42 0 0 1 42 42"/><path d="M38.7 74h25.6a1.7 1.7 0 0 1 0 3.4H38.7a1.7 1.7 0 0 1 0-3.4zM41 79h20l-3 5.2q-.6 1-1.8 1H45.8q-1.2 0-1.8-1z"/></svg></span><b class="word">Photo<em>Flix</em></b></div>
+      <h1>Scan to set up this screen</h1>
+      <div class="qr-wrap"><img id="qrBig" class="qr-big" alt="QR code"></div>
+      <p class="url hidden" id="urlBig"></p> <!-- the QR already holds the link -->
+      <p class="code-line">Screen code <b id="codeBig">------</b></p>
+      <p class="hint">Opens in the phone's browser. Nothing to install. The first phone chooses the staff PIN.</p>
+      <p class="hint">Press <b>Menu (≡)</b> on the remote to set the screen name and room.</p>
+      <div id="setupSound" class="pill hidden"><i class="remote"></i>Press OK on the remote (or click) to turn on sound</div>
+    </div>
+  </section>
+
+  <!-- Screen name + room, typed on the TV (Menu on the remote; the Fire TV app uses its own box) -->
+  <section id="tvSet" class="tvset hidden">
+    <div class="setup-card">
+      <h1>Screen settings</h1>
+      <label>Screen name <small>(optional)</small><input id="tvName" maxlength="40" placeholder="e.g. OPD waiting hall"></label>
+      <label>Room / counter <small>(said when a token is called)</small><input id="tvRoom" maxlength="30" placeholder="e.g. Room 2"></label>
+      <div class="tvset-row"><button id="tvSave" class="btn red">Save</button><button id="tvCancel" class="btn">Cancel</button></div>
+    </div>
+  </section>
+
+  <!-- Big "token called" announcement -->
+  <section id="call" class="call hidden">
+    <svg class="swoosh" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <filter id="sw-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="9"/></filter>
+        <linearGradient id="sw-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff2a1e" stop-opacity="0"/><stop offset=".4" stop-color="#ff2a1e" stop-opacity=".22"/><stop offset="1" stop-color="#0a0405" stop-opacity="0"/></linearGradient>
+      </defs>
+      <g fill="none" stroke-linecap="round">
+        <g stroke="#ff1e12" filter="url(#sw-glow)" opacity=".85">
+          <path stroke-width="16" d="M-60 120 C 240 200 420 330 560 470"/>
+          <path stroke-width="10" d="M-60 300 C 220 330 420 400 560 500"/>
+          <path stroke-width="16" d="M1660 120 C 1360 200 1180 330 1040 470"/>
+          <path stroke-width="10" d="M1660 300 C 1380 330 1180 400 1040 500"/>
+        </g>
+        <g stroke="#ff9a8c" stroke-width="2.4" opacity=".9">
+          <path d="M-60 120 C 240 200 420 330 560 470"/><path d="M-60 300 C 220 330 420 400 560 500"/>
+          <path d="M1660 120 C 1360 200 1180 330 1040 470"/><path d="M1660 300 C 1380 330 1180 400 1040 500"/>
+        </g>
+      </g>
+      <rect y="640" width="1600" height="260" fill="url(#sw-floor)"/>
+      <ellipse cx="800" cy="700" rx="520" ry="22" fill="#ff2a1e" opacity=".35" filter="url(#sw-glow)"/>
+    </svg>
+    <div class="call-card">
+      <span class="call-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 11v2M13 17v2"/></svg></span>
+      <div class="lbl">Token number</div>
+      <div class="call-tok" id="callTok">--</div>
+      <div class="call-name" id="callName"></div>
+      <div class="call-room">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span id="callRoom"></span>
+      </div>
+    </div>
+  </section>
+
+  <div id="sound" class="sound hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg><span><b>Sound is off.</b> Click here or press OK on the remote to turn on token announcements.</span></div>
+  <div id="offline" class="offline hidden">Reconnecting…</div>
+  <script src="tv.js"></script>
+</body>
+</html>

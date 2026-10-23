@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0b0d">
+  <title>PhotoFlix staff</title>
+  <link rel="stylesheet" href="phone.css">
+</head>
+<body>
+  <!-- Join: opened from the TV's QR (screen code filled in) -->
+  <section id="join" class="join">
+    <div class="hero" aria-hidden="true">
+      <div class="tv">
+        <div class="tv-screen">
+          <div class="hero-logo"><span><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect x="23" y="16" width="55" height="54" rx="9"/><path class="w" d="M23 46a24 24 0 0 1 24 24M23 28a42 42 0 0 1 42 42"/><path d="M38.7 74h25.6a1.7 1.7 0 0 1 0 3.4H38.7a1.7 1.7 0 0 1 0-3.4zM41 79h20l-3 5.2q-.6 1-1.8 1H45.8q-1.2 0-1.8-1z"/></svg></span><b>Photo<em>Flix</em></b></div>
+          <p>Photos and patient calling on the waiting-room TV.<small>Works in your browser, nothing to install.</small></p>
+        </div>
+        <i class="tv-stand"></i>
+      </div>
+    </div>
+
+    <div class="join-card">
+      <div class="join-h">
+        <span class="join-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+        <div><h1>Join Screen</h1><p>Enter the details shown on the TV to start</p></div>
+      </div>
+
+      <div class="fld">
+        <div class="fld-l"><label for="code">Screen Code</label><button type="button" id="codeInfo" class="info" aria-label="Where is the screen code?">i</button></div>
+        <p id="codeHelp" class="help hidden">The 6 letters under the QR code on the TV. Scanning the QR fills them in.</p>
+        <div class="code-wrap" id="codeWrap">
+          <input id="code" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Screen code">
+          <div class="boxes" id="codeBoxes"><b></b><b></b><b></b><b></b><b></b><b></b></div>
+        </div>
+      </div>
+
+      <div class="fld">
+        <label for="name">Your Name</label>
+        <div class="ifield">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+          <input id="name" maxlength="24" placeholder="e.g. Sister Mary" autocomplete="name">
+        </div>
+      </div>
+
+      <div class="fld">
+        <label for="pin" id="pinLbl">Staff PIN <small>(4–6 digits)</small></label>
+        <div class="ifield">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+          <input id="pin" type="password" inputmode="numeric" maxlength="6" placeholder="••••••" autocomplete="off">
+          <button type="button" id="pinEye" class="eye" aria-label="Show PIN">
+            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c5 0 9 4.5 10 7-.4 1-1.2 2.3-2.4 3.5M6.6 6.6C4.3 8 2.7 10.2 2 12c1 2.5 5 7 10 7 1.8 0 3.4-.6 4.8-1.4M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 12c1-2.5 5-7 10-7s9 4.5 10 7c-1 2.5-5 7-10 7S3 14.5 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- New screen only: the first phone chooses the PIN, typed twice -->
+      <div class="fld hidden" id="pin2Row">
+        <label for="pin2">Type the PIN again</label>
+        <div class="ifield">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+          <input id="pin2" type="password" inputmode="numeric" maxlength="6" placeholder="••••••" autocomplete="off">
+        </div>
+      </div>
+      <p id="pinHelp" class="help hidden"></p>
+
+      <button id="joinBtn" class="primary join-btn"><span id="joinTxt">Join screen</span><span aria-hidden="true">→</span></button>
+      <div id="joinMsg" class="msg"></div>
+    </div>
+  </section>
+
+  <section id="dash" class="page hidden" data-tab="patients">
+    <header class="top">
+      <div class="logo sm"><span><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect x="23" y="16" width="55" height="54" rx="9"/><path class="w" d="M23 46a24 24 0 0 1 24 24M23 28a42 42 0 0 1 42 42"/><path d="M38.7 74h25.6a1.7 1.7 0 0 1 0 3.4H38.7a1.7 1.7 0 0 1 0-3.4zM41 79h20l-3 5.2q-.6 1-1.8 1H45.8q-1.2 0-1.8-1z"/></svg></span><b id="screenName">Screen</b></div>
+      <span id="tvDot" class="dot off">TV off</span>
+      <button id="gear" class="gear" aria-label="Settings">⚙️</button>
+    </header>
+
+    <!-- PATIENTS -->
+    <div class="in-patients">
+      <div class="now card">
+        <div class="now-l">
+          <small>Now serving</small>
+          <div class="now-tok" id="nowTok">—</div>
+          <div class="now-nm" id="nowName">Nobody called yet</div>
+        </div>
+        <button id="recall" class="ghost-btn" title="Announce again">🔊 Recall</button>
+      </div>
+      <button id="nextBtn" class="primary big">Call next ▶</button>
+      <div class="room-row">Calling to <button id="roomBtn" class="chip"></button></div>
+
+      <div class="card add">
+        <div class="add-h">New patient <span>Token <b id="nextTok">1</b> (automatic)</span></div>
+        <input id="patient" maxlength="40" placeholder="Patient name" autocomplete="off">
+        <input id="patientPhone" type="tel" inputmode="tel" maxlength="16" placeholder="Mobile (optional)" autocomplete="off">
+        <div class="add-row">
+          <input id="patientRoom" maxlength="30" placeholder="Room no. (optional)" autocomplete="off">
+          <button id="addBtn" class="primary">Add</button>
+        </div>
+        <p class="add-hint">Room: where this patient goes when called. Blank = the room of the nurse who calls.</p>
+      </div>
+    </div>
+
+    <!-- TODAY'S LIST -->
+    <div class="in-list">
+      <div class="list-h">
+        <h2>Today's patients <span id="countAll"></span></h2>
+        <div class="filters" id="filters">
+          <button data-f="all" class="on">All</button>
+          <button data-f="waiting">Waiting</button>
+          <button data-f="done">Done</button>
+        </div>
+      </div>
+      <div id="patientList" class="list"></div>
+    </div>
+
+    <!-- PHOTOS -->
+    <div class="in-photos">
+      <label class="primary big upload" for="photoIn">＋ Add photos / videos</label>
+      <input id="photoIn" type="file" accept="image/*,video/*" multiple class="hidden">
+      <div id="upBar" class="upbar hidden"><i id="upFill"></i><span id="upTxt"></span></div>
+      <p class="hint" id="photoHint">Photos and videos play on the TV in this order. Tap one to change its number or delete it.</p>
+      <div id="grid" class="grid"></div>
+    </div>
+
+    <!-- SETTINGS (⚙️ in the header) -->
+    <div class="in-settings">
+      <button class="back" id="backBtn">‹ Back</button>
+      <div class="card set-card">
+        <label>Screen name <small>(optional, shown on the TV)</small><input id="sName" maxlength="40" placeholder="Leave blank for none"></label>
+        <label>City <small>(weather on the TV)</small><input id="sCity" maxlength="40" placeholder="e.g. Bengaluru"></label>
+        <label>Room / counter <small>(for this screen, said when a token is called; also settable on the TV)</small><input id="sRoom" maxlength="30" placeholder="e.g. Room 2"></label>
+        <label>Photo changes every
+          <select id="sInterval"><option value="5">5 seconds</option><option value="8">8 seconds</option><option value="12">12 seconds</option><option value="20">20 seconds</option><option value="30">30 seconds</option></select>
+        </label>
+        <label class="sw"><input type="checkbox" id="sVoice"> Voice announcement on TV</label>
+        <label class="sw"><input type="checkbox" id="sNames"> Show patient names on TV</label>
+        <label class="sw"><input type="checkbox" id="sVideoSound"> Play video sound on TV</label>
+        <button id="saveSet" class="primary">Save</button>
+      </div>
+      <div class="card set-card">
+        <button id="qrShow" class="row-btn">📱 Show QR on TV (2 min)<span>›</span></button>
+        <button id="pinBtn" class="row-btn">🔒 Change staff PIN<span>›</span></button>
+        <button id="resetBtn" class="row-btn">🌅 Start new day (tokens from 1)<span>›</span></button>
+        <div class="row-btn static">Screen code<b id="codeShow"></b></div>
+        <div class="staff" id="staffList"></div>
+        <button id="leave" class="row-btn bad">Unlink this phone</button>
+      </div>
+    </div>
+  </section>
+
+  <nav id="tabs" class="tabs hidden">
+    <button data-tab="patients" class="on"><span>🎫</span>Patients</button>
+    <button data-tab="list"><span>📋</span>List<i id="listCount" class="badge hidden"></i></button>
+    <button data-tab="photos"><span>🖼️</span>Photos</button>
+  </nav>
+
+  <!-- Edit a patient -->
+  <div id="editSheet" class="sheet hidden">
+    <div class="sheet-card">
+      <h3>Token <span id="editTok"></span></h3>
+      <label>Name<input id="editName" maxlength="40" placeholder="Patient name"></label>
+      <label>Mobile<input id="editPhone" type="tel" inputmode="tel" maxlength="16" placeholder="+919876543210"></label>
+      <label>Room <small>(blank = the room of the nurse who calls)</small><input id="editRoom" maxlength="30" placeholder="e.g. 2"></label>
+      <div class="row3">
+        <button class="ghost-btn" id="editCall">🔔 Call</button>
+        <button class="ghost-btn" id="editDone">✓ Done</button>
+        <button class="ghost-btn" id="editSkip">↷ Skip</button>
+      </div>
+      <button class="primary" id="editSave">Save changes</button>
+      <button class="danger" id="editDel">🗑️ Delete patient</button>
+      <button class="ghost" data-close>Close</button>
+    </div>
+  </div>
+
+  <!-- Photo: change its number in the loop, or delete -->
+  <div id="picSheet" class="sheet hidden">
+    <div class="sheet-card">
+      <img id="picPrev" class="pic-prev" alt="">
+      <video id="picVid" class="pic-prev hidden" controls playsinline preload="metadata"></video>
+      <div class="pos-row">
+        <button class="ghost-btn" id="picEarlier">◀</button>
+        <label>Photo number<input id="picPos" type="number" inputmode="numeric" min="1"></label>
+        <button class="ghost-btn" id="picLater">▶</button>
+      </div>
+      <p class="hint" id="picInfo"></p>
+      <button class="primary" id="picSave">Save number</button>
+      <button class="danger" id="picDel">🗑️ Delete photo</button>
+      <button class="ghost" data-close>Close</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <div id="lost" class="lost hidden"></div>
+  <script src="phone.js"></script>
+</body>
+</html>

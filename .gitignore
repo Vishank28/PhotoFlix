@@ -1,0 +1,10 @@
+node_modules/
+data/
+.env
+
+# Not for the public repository: demo videos (upload them to YouTube) and the private setup guide (AWS account details)
+demo-videos/
+PhotoFlix-Guide.pdf
+# Local tool settings
+.claude/
+*.log

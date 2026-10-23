@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 320x180 TV launcher banner: dark card, the PhotoFlix logo, title bars (vector, no image files).
+     The logo is drawn on a 100x100 grid like public/img/logo.svg: red rounded square, white TV (screen + stand),
+     red cast waves through the screen. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <path android:fillColor="#0B0B0D" android:pathData="M0,0h320v180h-320z" />
+    <group android:translateX="46" android:translateY="44" android:scaleX="0.92" android:scaleY="0.92">
+        <path android:fillColor="#E8453C" android:pathData="M26,0h48a26,26 0 0,1 26,26v48a26,26 0 0,1 -26,26h-48a26,26 0 0,1 -26,-26v-48a26,26 0 0,1 26,-26z" />
+        <path android:fillColor="#FFFFFF" android:pathData="M32,16h37a9,9 0 0,1 9,9v36a9,9 0 0,1 -9,9h-37a9,9 0 0,1 -9,-9v-36a9,9 0 0,1 9,-9z" />
+        <path android:fillColor="#FFFFFF" android:pathData="M38.7,74h25.6a1.7,1.7 0 0,1 0,3.4h-25.6a1.7,1.7 0 0,1 0,-3.4z" />
+        <path android:fillColor="#FFFFFF" android:pathData="M41,79h20l-3,5.2q-0.6,1 -1.8,1h-11.4q-1.2,0 -1.8,-1z" />
+        <path android:strokeColor="#E8453C" android:strokeWidth="10" android:pathData="M23,46a24,24 0 0,1 24,24" />
+        <path android:strokeColor="#E8453C" android:strokeWidth="10" android:pathData="M23,28a42,42 0 0,1 42,42" />
+    </group>
+    <path android:fillColor="#FFFFFF" android:pathData="M172,76h110v14h-110z" />
+    <path android:fillColor="#E8453C" android:pathData="M172,100h70v8h-70z" />
+</vector>

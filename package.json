@@ -1,0 +1,28 @@
+{
+  "name": "photoflix",
+  "version": "1.0.0",
+  "description": "TV photo slideshow + hospital token calling. Staff phones join by QR, add/delete photos and call the next patient.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.1151.0",
+    "@aws-sdk/client-lambda": "3.1151.0",
+    "@aws-sdk/client-polly": "3.1151.0",
+    "@aws-sdk/client-s3": "3.1151.0",
+    "@aws-sdk/lib-dynamodb": "3.1151.0",
+    "@aws-sdk/s3-request-presigner": "3.1151.0",
+    "express": "^4.19.2",
+    "ffmpeg-static": "5.3.0",
+    "qrcode": "^1.5.3",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-sns": "3.1151.0"
+  }
+}

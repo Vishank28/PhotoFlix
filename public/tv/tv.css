@@ -1,0 +1,189 @@
+:root {
+  --bg: #0b0b0d;
+  --ink: #ffffff;
+  --soft: rgba(255, 255, 255, .72);
+  --red: #e8453c;
+  --red-dark: #b8302a;
+  --card: rgba(18, 18, 22, .78);
+  --line: rgba(255, 255, 255, .14);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: "Segoe UI", Roboto, "Noto Sans", Arial, sans-serif; cursor: none; }
+.hidden { display: none !important; }
+
+/* slideshow, cross-fading, never enlarged by an effect so photos stay crisp:
+   a wide photo fills the whole screen (trimmed a little if not exactly TV-shaped, centred slightly above the
+   middle where faces are); a tall photo, or one much wider than the TV (a banner), is shown whole over a soft
+   blurred copy of itself (tv.js showWhole). */
+#stage, .slide, .shade { position: fixed; inset: 0; }
+.slide { background: #000; opacity: 0; transition: opacity 1.4s ease; overflow: hidden; }
+.slide.on { opacity: 1; }
+.slide.now, .vid.now { transition: none; } /* switched at once: hidden under something that is still on screen */
+/* In the Fire TV app a video is drawn on a layer *behind* the page, so the page must be see-through where it
+   plays: no page background, no black behind the video, and the photo underneath hidden while it plays. */
+html.pf-app, .pf-app body, .pf-app #stage { background: transparent; }
+.pf-app .vid { background: transparent; }
+.pf-app.video-on .slide { opacity: 0 !important; transition: none; }
+.slide .pic { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.slide:not(.has) .pic { visibility: hidden; }
+.slide.whole .pic { object-fit: contain; object-position: 50% 50%; }
+.slide.whole::before { content: ""; position: absolute; inset: -40px; background-image: var(--photo); background-size: cover; background-position: center; filter: blur(40px) brightness(.45); }
+.shade { pointer-events: none; background: linear-gradient(180deg, rgba(0, 0, 0, .55) 0%, transparent 18%, transparent 72%, rgba(0, 0, 0, .55) 100%); }
+/* no photos yet: sunset scene, title, fan of example pictures */
+.empty { position: absolute; inset: 0; overflow: hidden; background: #0a0405; transition: opacity 1.2s ease; }
+.empty.gone { opacity: 0; } /* fades away once the first photo is ready underneath */
+.empty .scene { position: absolute; inset: 0; width: 100%; height: 100%; }
+.empty-c { position: absolute; left: 0; right: 0; top: 17vh; display: flex; flex-direction: column; align-items: center; text-align: center; text-shadow: 0 .3vw 1.6vw rgba(0, 0, 0, .7); }
+.logo.huge { font-size: 5.2vw; gap: 1.2vw; }
+.logo.huge span { width: 5.4vw; height: 5.4vw; border-radius: 1.3vw; font-size: 2.4vw; box-shadow: 0 0 2.4vw rgba(232, 69, 60, .6); }
+.empty-c h2 { margin-top: 2.4vh; font-size: 2.5vw; font-weight: 700; }
+.empty-c p { margin-top: 1vh; font-size: 1.45vw; color: rgba(255, 255, 255, .78); }
+/* five places (s0-s4); cards glide one place left every few seconds, the leftmost comes back on the right */
+.fan { position: absolute; left: 0; right: 0; bottom: 13vh; height: 15vw; perspective: 80vw; }
+.fan .c { position: absolute; top: 0; left: 50%; display: block; width: 24vw; height: 15vw; margin-left: -12vw; border-radius: .9vw; overflow: hidden;
+  border: .15vw solid rgba(255, 255, 255, .55); box-shadow: 0 0 1.6vw rgba(255, 60, 45, .55), 0 1.5vw 3vw rgba(0, 0, 0, .6);
+  -webkit-box-reflect: below .5vw linear-gradient(transparent 62%, rgba(255, 255, 255, .22));
+  transition: transform 1.2s cubic-bezier(.45, .05, .25, 1), opacity .6s ease, box-shadow 1.2s ease, border-color 1.2s ease; }
+.fan .c img, .fan .c video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.fan .s0 { transform: translateX(-29vw) rotateY(34deg) scale(.66); z-index: 1; }
+.fan .s1 { transform: translateX(-16.5vw) rotateY(22deg) scale(.8); z-index: 2; }
+.fan .s2 { transform: none; z-index: 3; border-color: rgba(255, 255, 255, .85); box-shadow: 0 0 2.6vw rgba(255, 60, 45, .8), 0 2vw 4vw rgba(0, 0, 0, .65); }
+.fan .s3 { transform: translateX(16.5vw) rotateY(-22deg) scale(.8); z-index: 2; }
+.fan .s4 { transform: translateX(29vw) rotateY(-34deg) scale(.66); z-index: 1; }
+.fan .c.out { opacity: 0; }
+.fan .c.jump { transition: none; }
+
+/* brand + clock */
+.logo { display: flex; align-items: center; gap: .6vw; font-size: 1.9vw; font-weight: 800; letter-spacing: .02em; }
+.logo span { display: grid; place-items: center; width: 2.6vw; height: 2.6vw; border-radius: .7vw; background: var(--red); font-size: 1.2vw; }
+.logo .word { font-weight: inherit; }
+.logo em { font-style: normal; color: var(--red2, #ff5a4e); }
+.logo span { background: var(--red); box-shadow: 0 .3vw 1.2vw rgba(232, 69, 60, .45); }
+/* the PhotoFlix logo: a white TV (screen + stand) in the red square, with red cast waves through the screen */
+.mark { display: block; width: 100%; height: 100%; fill: #fff; }
+.mark .w { fill: none; stroke: var(--red); stroke-width: 10; }
+.logo small { font-size: 1.2vw; font-weight: 500; color: var(--soft); margin-left: .8vw; padding-left: .8vw; border-left: 2px solid var(--line); }
+.logo small:empty { display: none; }
+.logo.big { font-size: 4vw; gap: 1vw; }
+.logo.big span { width: 5vw; height: 5vw; border-radius: 1.3vw; font-size: 2.3vw; }
+.top { position: fixed; z-index: 3; left: 3vw; right: 3vw; top: 3vh; display: flex; justify-content: space-between; align-items: center; text-shadow: 0 2px 10px rgba(0, 0, 0, .6); }
+.top-r { display: flex; align-items: center; gap: 2vw; }
+.clock { text-align: right; }
+.clock b { display: block; font-size: 2.9vw; font-weight: 700; line-height: 1; }
+.clock span { display: block; margin-top: .4vh; font-size: 1.1vw; color: var(--soft); }
+/* weather left of the clock, split by a thin line */
+.wx { display: flex; align-items: center; gap: .9vw; padding-right: 2vw; border-right: 1px solid rgba(255, 255, 255, .35); }
+.wx-ico { font-size: 3.4vw; line-height: 1; }
+.wx-t b { display: block; font-size: 2.3vw; font-weight: 700; line-height: 1; }
+.wx-t span { display: block; font-size: .95vw; color: var(--soft); line-height: 1.35; }
+
+/* token panel */
+.panel { position: fixed; right: 2.5vw; top: 14vh; bottom: 6vh; width: 25vw; background: var(--card); border: 1px solid var(--line); border-radius: 1.6vw; padding: 2.2vw; display: flex; flex-direction: column; backdrop-filter: blur(14px); }
+.panel .lbl { font-size: 1.1vw; text-transform: uppercase; letter-spacing: .14em; color: var(--soft); font-weight: 700; }
+.now { background: var(--red); border-radius: 1.2vw; padding: 1.6vw; text-align: center; }
+.now .lbl { color: rgba(255, 255, 255, .85); }
+.now .tok { font-size: 7.5vw; font-weight: 900; line-height: 1.05; }
+.now .nm { font-size: 1.8vw; font-weight: 700; min-height: 1.2em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.now .rm { font-size: 1.3vw; opacity: .9; }
+.now.flash { animation: flash 1s ease-in-out 3; }
+@keyframes flash { 50% { background: #ff6b5f; transform: scale(1.03); } }
+.next-lbl { margin: 2vw 0 1vw; }
+.next { list-style: none; display: flex; flex-direction: column; gap: .8vw; }
+.next li { display: flex; align-items: center; gap: 1.2vw; background: rgba(255, 255, 255, .07); border-radius: .9vw; padding: .9vw 1.2vw; font-size: 1.5vw; }
+.next li b { font-size: 2.2vw; font-weight: 900; min-width: 4.5vw; color: #ff8a80; }
+.next li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.waiting { margin-top: auto; font-size: 1.2vw; color: var(--soft); text-align: center; }
+
+/* QR */
+.qr-corner { position: fixed; left: 3vw; bottom: 5vh; display: flex; align-items: center; gap: 1.2vw; background: var(--card); border: 1px solid var(--line); border-radius: 1.2vw; padding: 1vw 1.4vw 1vw 1vw; }
+.qr-corner img { width: 9vw; height: 9vw; background: #fff; border-radius: .6vw; padding: .4vw; }
+.qr-corner b { display: block; font-size: 1.3vw; }
+.qr-corner span { font-size: 1.1vw; color: var(--soft); letter-spacing: .2em; }
+.qr-corner small { display: block; margin-top: .6vw; font-size: .95vw; color: var(--soft); }
+/* first-time setup: glass card over glowing red arcs */
+.setup { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; text-align: center;
+  background: radial-gradient(ellipse 70% 60% at 50% 45%, #3b0d0b 0%, #1a0605 45%, #070304 100%); }
+.arcs { position: absolute; inset: 0; pointer-events: none; }
+.arcs i { position: absolute; border-radius: 50%; border: .22vw solid rgba(255, 70, 55, .95);
+  box-shadow: 0 0 1.4vw rgba(255, 45, 30, .85), 0 0 4vw rgba(255, 30, 20, .45), inset 0 0 1.4vw rgba(255, 45, 30, .5);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 92%); mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 92%); }
+.arcs .a1 { width: 110vw; height: 110vw; left: -74vw; top: 6vw; }
+.arcs .a2 { width: 110vw; height: 110vw; right: -74vw; top: 6vw; }
+.arcs .a3 { width: 140vw; height: 140vw; left: -106vw; top: 2vw; opacity: .4; border-width: .12vw; }
+.arcs .a4 { width: 140vw; height: 140vw; right: -106vw; top: 2vw; opacity: .4; border-width: .12vw; }
+.setup-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 1.4vh; padding: 3.2vh 5.5vw 3vh;
+  background: linear-gradient(180deg, rgba(40, 12, 11, .62), rgba(16, 6, 6, .72)); border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 1.6vw; box-shadow: 0 2vw 6vw rgba(0, 0, 0, .55), inset 0 1px 0 rgba(255, 255, 255, .06); backdrop-filter: blur(1.2vw); -webkit-backdrop-filter: blur(1.2vw); }
+.setup h1 { font-size: 2.3vw; font-weight: 700; letter-spacing: .01em; margin: .4vh 0 .6vh; }
+.qr-wrap { background: #fff; border-radius: 1.3vw; padding: 1.1vw; box-shadow: 0 0 0 .35vw rgba(255, 80, 70, .22), 0 0 2.6vw rgba(232, 69, 60, .75), 0 0 6vw rgba(232, 69, 60, .35); }
+.qr-big { display: block; width: 18vw; height: 18vw; }
+.setup p { font-size: 1.15vw; color: rgba(255, 255, 255, .72); }
+.setup .url { font-size: 1.25vw; font-weight: 700; color: #ff5a4e; margin-top: 1vh; word-break: break-all; }
+.setup .code-line { font-size: 1.35vw; color: rgba(255, 255, 255, .78); }
+.setup .code-line b { color: #fff; font-size: 2vw; font-weight: 800; letter-spacing: .38em; margin-left: .6vw; }
+.setup .hint { font-size: 1vw; max-width: 46vw; }
+.pill { display: inline-flex; align-items: center; gap: .8vw; margin-top: .6vh; padding: .55vw 1.6vw; border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, .2); background: rgba(255, 255, 255, .04); font-size: 1vw; color: rgba(255, 255, 255, .85); }
+.remote { position: relative; width: .75vw; height: 1.5vw; border: .12vw solid rgba(255, 255, 255, .85); border-radius: .25vw; }
+.remote::before, .remote::after { content: ""; position: absolute; left: 50%; width: .22vw; height: .22vw; margin-left: -.11vw; border-radius: 50%; background: #fff; }
+.remote::before { top: .22vw; }
+.remote::after { top: .62vw; }
+body.setup-on #sound { display: none; }
+
+/* token called: glowing glass card between red light streaks (the brand, weather and clock stay visible above it) */
+.call { position: fixed; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; animation: fade .4s ease;
+  background: radial-gradient(70vw 55vw at 50% 45%, #1d0a0b, #070405 70%); }
+.call .swoosh { position: absolute; inset: 0; width: 100%; height: 100%; }
+.call-card { position: relative; min-width: 36vw; max-width: 70vw; padding: 2vw 5vw 2.6vw; text-align: center; border-radius: 1.8vw;
+  background: linear-gradient(180deg, rgba(64, 30, 32, .55) 0%, rgba(22, 12, 14, .7) 45%, rgba(28, 10, 12, .78) 100%);
+  border: .16vw solid rgba(255, 92, 80, .9);
+  box-shadow: 0 0 1.6vw rgba(255, 50, 38, .75), 0 0 5vw rgba(255, 40, 30, .3), inset 0 0 2.4vw rgba(255, 60, 45, .18), inset 0 .1vw 0 rgba(255, 255, 255, .12);
+  backdrop-filter: blur(10px); animation: pop .5s cubic-bezier(.2, 1.4, .4, 1); }
+.call-ico { display: grid; place-items: center; width: 4.6vw; height: 4.6vw; margin: 0 auto 1.2vw; border-radius: 1vw;
+  background: linear-gradient(180deg, rgba(232, 69, 60, .45), rgba(150, 30, 30, .45)); border: 1px solid rgba(255, 120, 110, .45); box-shadow: 0 0 1.6vw rgba(232, 69, 60, .45); }
+.call-ico svg { width: 2.6vw; height: 2.6vw; transform: rotate(-45deg); }
+.call-card .lbl { font-size: 1.4vw; text-transform: uppercase; letter-spacing: .32em; font-weight: 700; color: rgba(255, 255, 255, .75); }
+.call-tok { font-size: 13vw; font-weight: 900; line-height: 1; margin-top: .4vw; text-shadow: 0 0 1.4vw rgba(255, 255, 255, .55), 0 0 4vw rgba(255, 90, 78, .55); }
+.call-name { font-size: 3.2vw; font-weight: 800; line-height: 1.2; max-width: 60vw; margin: 0 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.call-name:empty { display: none; }
+.call-room { display: inline-flex; align-items: center; gap: 1.4vw; margin-top: 1.4vw; padding: 1vw 3.4vw 1vw 2.4vw; border-radius: 1vw; font-size: 2.3vw;
+  background: rgba(232, 69, 60, .16); border: .12vw solid rgba(255, 98, 86, .65); }
+.call-room.none { display: none; }
+.call-room svg { flex: none; width: 2.8vw; height: 2.8vw; color: #ff5a4e; }
+.call-room b { font-weight: 800; }
+@keyframes pop { from { transform: scale(.7); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes fade { from { opacity: 0; } }
+
+.sound, .offline { position: fixed; z-index: 4; left: 50%; transform: translateX(-50%); bottom: 3vh; background: rgba(14, 12, 16, .72); border: 1px solid rgba(255, 255, 255, .22); border-radius: 99px; padding: .8vw 2vw; font-size: 1.1vw; color: rgba(255, 255, 255, .88); backdrop-filter: blur(8px); white-space: nowrap; }
+/* "Sound is off" (a browser that blocks sound until a click): big and pulsing so nobody misses it */
+.sound { display: flex; align-items: center; gap: 1.1vw; bottom: 5vh; padding: 1.1vw 2.4vw; font-size: 1.5vw; color: #fff; cursor: pointer;
+  background: rgba(60, 12, 10, .88); border: .15vw solid #ff5a4e; box-shadow: 0 0 2vw rgba(232, 69, 60, .6); animation: soundPulse 1.8s ease-in-out infinite; }
+.sound b { color: #ff8a80; }
+.sound svg { width: 2.2vw; height: 2.2vw; flex: none; color: #ff8a80; }
+@keyframes soundPulse { 50% { box-shadow: 0 0 3.6vw rgba(232, 69, 60, .95); } }
+.offline { top: 2vh; bottom: auto; color: #ffb4ac; }
+
+/* weather under the clock */
+.wx { display: flex; align-items: center; justify-content: flex-end; gap: .5vw; margin-top: .8vh; font-size: 1.3vw; }
+.wx b { font-size: 1.6vw; }
+.wx span:last-child { color: var(--soft); }
+
+/* videos in the loop: whole video visible, fades in over the last photo */
+.vid { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; background: #000; opacity: 0; transition: opacity .8s ease; pointer-events: none; }
+.vid.on { opacity: 1; }
+.vid.whole { object-fit: contain; object-position: 50% 50%; } /* a tall or very wide video is shown whole */
+
+/* screen settings box on the TV */
+.tvset { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(5, 2, 2, .78); z-index: 50; cursor: default; }
+.tvset .setup-card { align-items: stretch; min-width: 40vw; text-align: left; }
+.tvset h1 { text-align: center; }
+.tvset label { display: block; font-size: 1.2vw; font-weight: 700; color: #fff; margin-top: 1vh; }
+.tvset label small { font-weight: 400; color: rgba(255, 255, 255, .6); }
+.tvset input { display: block; width: 100%; margin-top: .6vh; font: inherit; font-size: 1.5vw; font-weight: 600; padding: .9vw 1vw; border-radius: .8vw;
+  border: 2px solid rgba(255, 255, 255, .18); background: rgba(0, 0, 0, .35); color: #fff; }
+.tvset input:focus { outline: none; border-color: #ff5a4e; box-shadow: 0 0 1.2vw rgba(232, 69, 60, .45); }
+.tvset-row { display: flex; gap: 1vw; margin-top: 2.4vh; }
+.btn { flex: 1; font: inherit; font-size: 1.3vw; font-weight: 800; padding: .9vw; border-radius: .8vw; border: 2px solid rgba(255, 255, 255, .18); background: rgba(255, 255, 255, .06); color: #fff; cursor: pointer; }
+.btn.red { background: linear-gradient(180deg, #ff5a4e, #d8322a); border-color: transparent; }
+.btn:focus { outline: none; box-shadow: 0 0 0 .25vw #fff; }
+.setup .hint b { color: #fff; }
